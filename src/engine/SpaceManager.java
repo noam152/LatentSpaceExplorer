@@ -17,6 +17,7 @@ public class SpaceManager {
     private Map<String, ILatentEntity> entities; // Central lookup table
     private IDistanceStrategy distanceMetric;    // Strategy pattern for distance calculations
     private List<IObserver> observers;           // List of observers for state changes
+    private boolean is2DMode = true;             // State variable to determine if the view is flat (2D) or spatial (3D). Default is 2D.
 
     // --- Viewport & Projection Settings ---
     private int xAxisIndex = 0;
@@ -74,9 +75,10 @@ public class SpaceManager {
 
     public int getZAxisIndex() {return zAxisIndex;}
 
-    public void setDisplayAxes(int xAxis, int yAxis) {
+    public void setDisplayAxes(int xAxis, int yAxis, int zAxis) {
         this.xAxisIndex = xAxis;
         this.yAxisIndex = yAxis;
+        this.zAxisIndex = zAxis;
         notifyObservers();
     }
 
@@ -232,5 +234,14 @@ public class SpaceManager {
             }
         }
         return closest;
+    }
+
+    public boolean is2DMode() { // Checks if the system is currently in 2D mode.
+        return is2DMode;
+    }
+
+    public void set2DMode(boolean is2D) { // Sets the view mode (2D or 3D) and triggers a UI update.
+        this.is2DMode = is2D;
+        notifyObservers();
     }
 }

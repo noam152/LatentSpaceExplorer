@@ -63,24 +63,33 @@ public class LatentSpaceView extends JPanel implements IObserver {
     }
 
     /**
-     *
-     * The 3D Engine (Rotation Math)
+     * The Projection Engine (Math to Screen)
+     * Handles both 2D flat projection and 3D rotation math.
+     * HEB: מנוע התצוגה - מטפל במתמטיקה של 2D ו-3D, כולל סיבוב המצלמה אם צריך.
      */
-    // Rotates points based on the current camera angle using Trigonometry.
-    private double[] project3D(double[] pcaVec) {
-        // Get the chosen viewing axes from the Brain
+    private double[] transformVector(double[] pcaVec) {
+
+        // Get X and Y axes indices from the SpaceManager
         int xAxis = spaceManager.getXAxisIndex();
         int yAxis = spaceManager.getYAxisIndex();
-        int zAxis = spaceManager.getZAxisIndex();
 
-        double x0 = 0.0, y0 = 0.0, z0 = 0.0; //Prepare empty variables (default to 0.0) to hold the 3 specific numbers we need
+        double x0 = 0.0, y0 = 0.0; // Prepare empty variables
 
-        // Safely extract values from the vector
+        // Safely extract values from the PCA vector
         if (pcaVec.length > xAxis) { x0 = pcaVec[xAxis]; }
         if (pcaVec.length > yAxis) { y0 = pcaVec[yAxis]; }
+
+        // THE 2D MODE LOGIC -  If we are in 2D mode, we don't care about Z and we don't rotate.
+        if (spaceManager.is2DMode()) {
+            return new double[]{x0, y0, 0.0}; // Return flat coordinates (Z is zero)
+        }
+
+        //  THE 3D MODE LOGIC - We are in 3D Mode! Get the Z axis index and value.
+        int zAxis = spaceManager.getZAxisIndex();
+        double z0 = 0.0;
         if (pcaVec.length > zAxis) { z0 = pcaVec[zAxis]; }
 
-        // 3. Get the current camera rotation angles (Pitch and Yaw)
+        // Get the current camera rotation angles (Pitch and Yaw)
         double rotX = spaceManager.getRotationX();
         double rotY = spaceManager.getRotationY();
 
@@ -112,7 +121,7 @@ public class LatentSpaceView extends JPanel implements IObserver {
             if (entity.getPCAVector() == null) continue;// Skip words that don't have a mathematical vector
 
             // Figure out exactly where this word is currently drawn on the screen
-            double[] projected = project3D(entity.getPCAVector());
+            double[] projected = transformVector(entity.getPCAVector());
             // Translate Math (X,Y) to physical Screen Pixels (X gets true, Y gets 'false')
             int screenX = getScreenCoordinate(projected[0], getWidth(), maxAbsValue, true);
             int screenY = getScreenCoordinate(projected[1], getHeight(), maxAbsValue, false);
@@ -145,7 +154,7 @@ public class LatentSpaceView extends JPanel implements IObserver {
         for (ILatentEntity entity : spaceManager.getAllEntities()) {
             if (entity.getPCAVector() == null) continue;
 
-            double[] projected = project3D(entity.getPCAVector());
+            double[] projected = transformVector(entity.getPCAVector());
             int screenX = getScreenCoordinate(projected[0], getWidth(), maxAbsValue, true);
             int screenY = getScreenCoordinate(projected[1], getHeight(), maxAbsValue, false);
             // Pack the word, its 2D screen pixels (X,Y), and its 3D depth (Z) into a container and add to the list

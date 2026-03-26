@@ -106,10 +106,10 @@ public class MainWindow extends JFrame { //Java's standard window class
          * --- PCA Axes Selection ---
          */
 
-        //Create a panel with a 3x2 grid layout (3 rows, 2 columns) with 5px gaps.
-        JPanel axisPanel = new JPanel(new GridLayout(3, 2, 5, 5)); //GridLayout - Equal cells
+        //Create a panel with a 4x2 grid layout (3 rows, 2 columns) with 5px gaps.
+        JPanel axisPanel = new JPanel(new GridLayout(4, 2, 5, 5)); //GridLayout - Equal cells
         axisPanel.setBorder(BorderFactory.createTitledBorder("PCA Axes Selection")); // Add a titled border around the module
-        axisPanel.setMaximumSize(new Dimension(320, 110));// Constrain the size so it doesn't stretch vertically
+        axisPanel.setMaximumSize(new Dimension(320, 140));// Constrain the size so it doesn't stretch vertically
 
         axisPanel.add(new JLabel(" X Axis (PC):")); // Row 1: X-Axis Label and Spinner
         // SpinnerModel: Initial Value=0, Min=0, Max=10, Step=1
@@ -121,6 +121,11 @@ public class MainWindow extends JFrame { //Java's standard window class
         JSpinner spinY = new JSpinner(new SpinnerNumberModel(1, 0, 10, 1));
         axisPanel.add(spinY);
 
+        JLabel lblZ = new JLabel(" Z Axis (PC):"); // Row 3: Z-Axis Label and Spinner
+        axisPanel.add(lblZ);
+        JSpinner spinZ = new JSpinner(new SpinnerNumberModel(2, 0, 10, 1));
+        axisPanel.add(spinZ);
+
 
         axisPanel.add(new JLabel("")); // Spacer to push the button to the 2nd column
 
@@ -129,18 +134,49 @@ public class MainWindow extends JFrame { //Java's standard window class
         btnApplyAxes.addActionListener(e -> {
             int x = (Integer) spinX.getValue();
             int y = (Integer) spinY.getValue();
+            int z = (Integer) spinZ.getValue();
 
             // Validation: Prevent projecting the same dimension twice
-            if (x == y) {
+            if (x == y || x == z || y == z) {
                 JOptionPane.showMessageDialog(this, "X and Y axes must be different!");
                 return;
             }
 
             // Create and dispatch the Command to update the axes (supports Undo).
-            ICommand cmd = new ChangeAxisCommand(SpaceEngine.getSpaceManager(), x, y);
+            ICommand cmd = new ChangeAxisCommand(SpaceEngine.getSpaceManager(), x, y, z);
             SpaceEngine.getCommandManager().executeCommand(cmd);
         });
         axisPanel.add(btnApplyAxes); // Add the "Apply Axes" execution button to the panel
+
+        /**
+         * --- Display Mode Control (2D / 3D) ---
+         */
+        // Create a panel for the mode selection with a title
+        JPanel displayModePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5)); // Create a new container (Panel) that arranges its items side-by-side
+        displayModePanel.setBorder(BorderFactory.createTitledBorder("View Mode"));
+        displayModePanel.setMaximumSize(new Dimension(320, 60)); // Lock height
+
+        // Create two Radio Buttons for the two modes. 2D starts as 'true' (selected)
+        JRadioButton radio2D = new JRadioButton("2D", true);
+        JRadioButton radio3D = new JRadioButton("3D", false);
+
+        // Group them together! This ensures that if you click one, the other turns off automatically
+        ButtonGroup modeGroup = new ButtonGroup();
+        modeGroup.add(radio2D);
+        modeGroup.add(radio3D);
+
+        // Add Listeners: What happens when you click them?
+        radio2D.addActionListener(e -> {
+            SpaceEngine.getSpaceManager().set2DMode(true); // Tell engine to go flat
+        });
+
+        radio3D.addActionListener(e -> {
+            SpaceEngine.getSpaceManager().set2DMode(false); // Tell engine to go 3D
+        });
+
+        // Add the buttons to the panel
+        displayModePanel.add(radio2D);
+        displayModePanel.add(radio3D);
 
         /**
          * --- 3D Camera Controls ---
@@ -449,6 +485,8 @@ public class MainWindow extends JFrame { //Java's standard window class
         panel.add(sysPanel);                        // System controls (Undo/Metric)
         panel.add(Box.createVerticalStrut(15));     // 15px spacer
         panel.add(axisPanel);                       // PCA axes selection
+        panel.add(Box.createVerticalStrut(15));     // 15px spacer
+        panel.add(displayModePanel);                // 2D/3D Mode Toggle Button
         panel.add(Box.createVerticalStrut(15));     // 15px spacer
         panel.add(cameraPanel);                     // 3D Camera controls
         panel.add(Box.createVerticalStrut(15));     // 15px spacer

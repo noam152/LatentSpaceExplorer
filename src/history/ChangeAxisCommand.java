@@ -11,22 +11,24 @@ public class ChangeAxisCommand implements ICommand {
     private SpaceManager spaceManager;
 
     // Backup variables for Undo functionality
-    private int oldXAxis, oldYAxis;
+    private int oldXAxis, oldYAxis, oldZAxis;
 
     // Target variables for Execute functionality
-    private int newXAxis, newYAxis;
+    private int newXAxis, newYAxis, newZAxis;
 
     /**
      * Constructor: Captured at the moment the user clicks "Change Axes".
      */
-    public ChangeAxisCommand(SpaceManager spaceManager, int newXAxis, int newYAxis) {
+    public ChangeAxisCommand(SpaceManager spaceManager, int newXAxis, int newYAxis, int newZAxis) {
         this.spaceManager = spaceManager;
         this.newXAxis = newXAxis;
         this.newYAxis = newYAxis;
+        this.newZAxis = newYAxis;
 
         // Snapshot: Ask the engine what is currently being displayed BEFORE we change it
         this.oldXAxis = spaceManager.getXAxisIndex();
         this.oldYAxis = spaceManager.getYAxisIndex();
+        this.oldZAxis = spaceManager.getZAxisIndex();
     }
 
     /**
@@ -35,7 +37,7 @@ public class ChangeAxisCommand implements ICommand {
     @Override
     public void execute() {
         // Change the view in the engine
-        spaceManager.setDisplayAxes(newXAxis, newYAxis);
+        spaceManager.setDisplayAxes(newXAxis, newYAxis, newZAxis);
     }
 
     /**
@@ -44,6 +46,6 @@ public class ChangeAxisCommand implements ICommand {
     @Override
     public void undo() {
         // Revert to the old view
-        spaceManager.setDisplayAxes(oldXAxis, oldYAxis);
+        spaceManager.setDisplayAxes(oldXAxis, oldYAxis, oldZAxis);
     }
 }
