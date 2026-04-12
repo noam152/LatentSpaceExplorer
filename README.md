@@ -23,20 +23,14 @@ Before running the application, ensure you have the following installed:
 
 ## 🚀 How to Run
 
-1. **Open the Project:**
-   Open the `LatentSpaceExplorer` folder in your preferred Java IDE (e.g., IntelliJ IDEA, Eclipse).
+### Option 1: The Visual Way (IntelliJ Maven Tool) - Recommended
+This is the easiest way to ensure all dependencies and working directories are handled correctly:
+1. Open the **Maven** tab on the right side of IntelliJ IDEA.
+2. Navigate to **LatentSpaceExplorer** > **Plugins** > **exec**.
+3. Double-click **exec:java**.
 
-2. **Sync Dependencies:**
-   Allow the IDE to import the Maven project. This will automatically download all necessary dependencies, such as **Gson** and **JUnit**.
+### Option 2: The Direct Run
+1. Open the project in your IDE and allow Maven to sync dependencies.
+2. Navigate to `src/main/java/engine/Main.java`.
+3. Right-click the file and select **Run 'Main.main()'**.
 
-3. **Launch the Application:**
-    * Navigate to `src/main/java/engine/Main.java`.
-    * Right-click the file and select **Run 'Main.main()'**.
-
-## ⚠️ Important Configuration
-The application relies on external files for vector processing. To ensure it runs correctly, the following files **must** remain in the project's root directory (alongside `pom.xml`):
-* `embedder.py`
-* `full_vectors.json`
-* `pca_vectors.json` (if generated)
-
-The application expects these files to be present in the working directory from which the IDE launches the process.
