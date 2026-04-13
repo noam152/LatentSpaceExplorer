@@ -30,6 +30,10 @@ public class SemanticScaleWindow extends JFrame {
         //  bring the filtered data from our updated Brain (SpaceManager)
         Map<String, List<ProjectionResult>> poles = spaceManager.getSemanticPoles(w1, w2, k);
 
+        // Extracting the scores of the anchor words from the map
+        double scoreW1 = poles.get("anchor_left").get(0).getScore();
+        double scoreW2 = poles.get("anchor_right").get(0).getScore();
+
         // Set up the Main Window Layout
         setLayout(new BorderLayout(10, 10));
 
@@ -45,9 +49,12 @@ public class SemanticScaleWindow extends JFrame {
         List<ProjectionResult> rightWords = poles.get("right");
         Collections.reverse(rightWords);
 
-        // Create the two lists using our helper function
-        JPanel leftPanel = createPolePanel("Closest to: " + w1, poles.get("left"), new Color(180, 50, 50));
-        JPanel rightPanel = createPolePanel("Closest to: " + w2, rightWords, new Color(50, 150, 50));
+        // Formatting the titles to include the baseline score for context
+        String leftTitle = String.format("Closest to: %s  [ Base Score: %.3f ]", w1, scoreW1);
+        JPanel leftPanel = createPolePanel(leftTitle, poles.get("left"), new Color(180, 50, 50));
+
+        String rightTitle = String.format("Closest to: %s  [ Base Score: %.3f ]", w2, scoreW2);
+        JPanel rightPanel = createPolePanel(rightTitle, rightWords, new Color(50, 150, 50));
 
         splitPanel.add(leftPanel);
         splitPanel.add(rightPanel);

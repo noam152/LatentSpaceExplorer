@@ -57,8 +57,6 @@ public class LatentSpaceEngine {
         System.out.println("Engine initialized successfully and ready for research!");
     }
 
-    // --- Controlled access points for the GUI ---
-
     public SpaceManager getSpaceManager() {
         return spaceManager;
     }

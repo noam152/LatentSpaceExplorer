@@ -35,7 +35,7 @@ public class SpaceManager {
         this.entities = new HashMap<>();
         this.observers = new ArrayList<>();
         this.distanceMetric = new EuclideanDistance(); // Default strategy
-        this.projectionState = new State2D();
+        this.projectionState = new State2D(); // Default strategy
     }
 
     // --- Observer Pattern Implementation ---
@@ -243,9 +243,16 @@ public class SpaceManager {
         double[] v2 = entity2.getFullVector();
         double[] axis = new double[v1.length];
 
+        double scoreW1 = 0;
+        double scoreW2 = 0;
+
         // Define the direction: Draw a line from w1 to w2 (axis = w2 - w1)
         for (int i = 0; i < v1.length; i++) {
             axis[i] = v2[i] - v1[i];
+
+            // Calculating the dot product for the anchor words
+            scoreW1 += v1[i] * axis[i];
+            scoreW2 += v2[i] * axis[i];
         }
 
         List<ProjectionResult> allProjections = new ArrayList<>();
@@ -279,6 +286,14 @@ public class SpaceManager {
         // Extract the extremes safely using our calculated safeK
         poles.put("left", new ArrayList<>(allProjections.subList(0, safeK)));
         poles.put("right", new ArrayList<>(allProjections.subList(allProjections.size() - safeK, allProjections.size())));
+
+        List<ProjectionResult> leftAnchorList = new ArrayList<>();
+        leftAnchorList.add(new ProjectionResult(w1, scoreW1));
+        poles.put("anchor_left", leftAnchorList);
+
+        List<ProjectionResult> rightAnchorList = new ArrayList<>();
+        rightAnchorList.add(new ProjectionResult(w2, scoreW2));
+        poles.put("anchor_right", rightAnchorList);
 
         return poles;
     }
