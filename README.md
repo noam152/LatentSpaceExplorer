@@ -24,10 +24,17 @@ Before running the application, ensure you have the following installed:
 ## 🚀 How to Run
 
 ### Option 1: The Visual Way (IntelliJ Maven Tool) - Recommended
-This is the easiest way to ensure all dependencies and working directories are handled correctly:
+This is the easiest way to ensure all dependencies and working directories are handled correctly.
+
+**Phase A: Build the Project (Required for first-time run)**
 1. Open the **Maven** tab on the right side of IntelliJ IDEA.
-2. Navigate to **LatentSpaceExplorer** > **Plugins** > **exec**.
-3. Double-click **exec:java**.
+2. Expand **LatentSpaceExplorer** > **Lifecycle**.
+3. Double-click **`clean`** to clear any old builds.
+4. Double-click **`compile`** and wait for the green "BUILD SUCCESS" message in the terminal.
+
+**Phase B: Run the Engine**
+1. Still in the Maven tab, scroll down and expand **Plugins** > **exec**.
+2. Double-click **`exec:java`** to launch the application.
 
 ### Option 2: The Direct Run
 1. Open the project in your IDE and allow Maven to sync dependencies.

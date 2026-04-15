@@ -6,7 +6,7 @@ import gui.rendering.IVisualEntity;
 import java.awt.Color;
 import java.awt.Font;
 
-public class VisualFactory {
+public class BrushCache {
 
     // UI Constants
     public static final Color DEFAULT_POINT_COLOR = Color.BLUE;

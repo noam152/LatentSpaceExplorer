@@ -168,7 +168,7 @@ public class LatentSpaceView extends JPanel implements IObserver {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // Clear the board
-        g.setFont(VisualFactory.DEFAULT_FONT);
+        g.setFont(BrushCache.DEFAULT_FONT);
 
         // Only calculate math if something actually changed (Zoom, Pan, Axis)
         // If nothing changed, we skip the heavy loop and go straight to drawing.
@@ -213,9 +213,9 @@ public class LatentSpaceView extends JPanel implements IObserver {
         }
 
         // Flyweight Brushes
-        IVisualEntity highlightedPoint = VisualFactory.getHighlightedEntity();
+        IVisualEntity highlightedPoint = BrushCache.getHighlightedEntity();
 
-        // 3. Zoom/Label Logic
+        // Zoom/Label Logic
         boolean is3D = !spaceManager.getProjectionState().is2D();
         double showLabelsThreshold = 0.5;
         boolean shouldShowLabels = zoomLevel < showLabelsThreshold;
@@ -225,7 +225,7 @@ public class LatentSpaceView extends JPanel implements IObserver {
             int radius = 8;
             int alpha = 160;
 
-            // Make it feel like real space: bigger and solid if close, smaller and faint if far away.
+            // bigger and solid if close, smaller and faint if far away.
             if (is3D) {
                 radius = (int) (8 + (p.depth * 3));
                 radius = Math.max(2, Math.min(radius, 18));
@@ -287,7 +287,7 @@ public class LatentSpaceView extends JPanel implements IObserver {
             JOptionPane.showMessageDialog(this,
                     "Word '" + searchWord + "' not found in the latent space!",
                     "Search Result", JOptionPane.INFORMATION_MESSAGE);
-            return null; // Stop here and return nothing
+            return null;
         }
 
         // Selection: Tell the system this is now the "Clicked" word.
@@ -300,7 +300,7 @@ public class LatentSpaceView extends JPanel implements IObserver {
 
         repaint();
 
-        return targetEntity; // Return the math object we found
+        return targetEntity;
     }
 
     /**

@@ -1,5 +1,5 @@
 package gui.rendering;
-import gui.VisualFactory;
+import gui.BrushCache;
 
 import java.awt.*;        // Java Drawing Tools
 
@@ -13,7 +13,7 @@ public class BaseVisualEntity implements IVisualEntity {
     public void draw(Graphics g, int screenX, int screenY, String word) {
 
         // Pick the brush color from our central Factory (Flyweight Pattern)
-        g.setColor(VisualFactory.DEFAULT_POINT_COLOR); // Blue
+        g.setColor(BrushCache.DEFAULT_POINT_COLOR); // Blue
 
         // Draw the Dot (Centered)
         // We subtract half the size (3px) so the point's center is exactly on our coordinates.

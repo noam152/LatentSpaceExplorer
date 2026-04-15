@@ -153,16 +153,16 @@ public class MainWindow extends JFrame implements IObserver {
     private JPanel createAxisPanel() {
         JPanel axisPanel = new JPanel(new GridLayout(4, 2, 5, 5));
         axisPanel.setBorder(BorderFactory.createTitledBorder("PCA Axes Selection"));
-        axisPanel.setMaximumSize(new Dimension(320, 140));
+        axisPanel.setMaximumSize(new Dimension(320, 140)); // constrain the size
 
         spinX = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
         spinY = new JSpinner(new SpinnerNumberModel(1, 0, 10, 1));
         spinZ = new JSpinner(new SpinnerNumberModel(2, 0, 10, 1));
 
-        axisPanel.add(new JLabel(" X Axis (PC):")); axisPanel.add(spinX);
-        axisPanel.add(new JLabel(" Y Axis (PC):")); axisPanel.add(spinY);
-        axisPanel.add(new JLabel(" Z Axis (PC):")); axisPanel.add(spinZ);
-        axisPanel.add(new JLabel("")); // Empty placeholder to align the button properly
+        axisPanel.add(new JLabel(" X Axis:")); axisPanel.add(spinX);
+        axisPanel.add(new JLabel(" Y Axis:")); axisPanel.add(spinY);
+        axisPanel.add(new JLabel(" Z Axis:")); axisPanel.add(spinZ);
+        axisPanel.add(new JLabel("")); // Empty space
 
         JButton btnApplyAxes = new JButton("Apply Axes");
         btnApplyAxes.addActionListener(e -> {
@@ -192,7 +192,7 @@ public class MainWindow extends JFrame implements IObserver {
     // Undo Module
     private JPanel createUndoPanel() {
         JPanel undoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        undoPanel.setMaximumSize(new Dimension(320, 45));
+        undoPanel.setMaximumSize(new Dimension(320, 45)); // constrain the size
 
         JButton btnUndo = new JButton("Undo Last Action");
         btnUndo.addActionListener(e -> SpaceEngine.getCommandManager().undoLastCommand());
@@ -210,7 +210,7 @@ public class MainWindow extends JFrame implements IObserver {
         JRadioButton radio2D = new JRadioButton("2D", true);
         JRadioButton radio3D = new JRadioButton("3D", false);
 
-        // ButtonGroup ensures only one radio button can be active at a time
+        // ButtonGroup ensures only one button can be active at a time
         ButtonGroup modeGroup = new ButtonGroup();
         modeGroup.add(radio2D);
         modeGroup.add(radio3D);
@@ -290,12 +290,12 @@ public class MainWindow extends JFrame implements IObserver {
                             spinK.setValue(50); // Snap back to max
                         }
 
-                        if (typedValue < 1) {
+                        else if (typedValue < 1) {
                             spinK.setValue(1); // Snap back to minimum
                         }
 
                         // Save valid input to the engine instantly
-                        else if (typedValue >= 1) {
+                        else {
                             spinK.commitEdit();
                         }
                     }}
@@ -410,7 +410,7 @@ public class MainWindow extends JFrame implements IObserver {
         return centroidPanel;
     }
 
-    // Direct Distance Calculator Module
+    // Distance Calculator Module
     private JPanel createDistanceCalcPanel() {
         JPanel distPanel = new JPanel();
         distPanel.setLayout(new BoxLayout(distPanel, BoxLayout.Y_AXIS));

@@ -1,6 +1,6 @@
 package gui.rendering;
 
-import gui.VisualFactory;
+import gui.BrushCache;
 
 import java.awt.*;
 
@@ -21,7 +21,7 @@ public class HighlightDecorator implements IVisualEntity {
         decoratedEntity.draw(g, x, y, identifier);
 
         // Draw red target rings around the point
-        g.setColor(VisualFactory.HIGHLIGHT_COLOR);
+        g.setColor(BrushCache.HIGHLIGHT_COLOR);
         g.drawOval(x - 6, y - 6, 12, 12); // Inner ring
         g.drawOval(x - 7, y - 7, 14, 14); // Outer ring
 
@@ -49,7 +49,7 @@ public class HighlightDecorator implements IVisualEntity {
         g.setColor(new Color(255, 255, 220, 245));
         g.fillRoundRect(cornerX, cornerY, textWidth + 20, textHeight + 10, 10, 10);
 
-        g.setColor(VisualFactory.HIGHLIGHT_COLOR); // Label Border
+        g.setColor(BrushCache.HIGHLIGHT_COLOR); // Label Border
         g.drawRoundRect(cornerX, cornerY, textWidth + 20, textHeight + 10, 10, 10);
 
         // Final text inside the bubble
